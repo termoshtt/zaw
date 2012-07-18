@@ -3,11 +3,11 @@
 function zaw-src-git-branches() {
     git rev-parse --git-dir >/dev/null 2>&1
     if [[ $? == 0 ]]; then
-        : ${(A)candidates::=${${(f)"$(git show-ref | awk '{print $2}')"}#refs/}}
+        : ${(A)candidates::=${${(f)"$(git show-ref | awk '{ print $2}' |sed '/^refs\/stash/d')"}#refs/}}
     fi
     actions=(zaw-src-git-branches-checkout zaw-src-git-branches-create zaw-src-git-branches-delete)
     act_descriptions=("check out" "create new branch from..." "delete")
-    options=(-n)
+    options=()
 }
 
 function zaw-src-git-branches-checkout () {
