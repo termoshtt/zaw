@@ -3,7 +3,9 @@
 function zaw-src-git-branches() {
     git rev-parse --git-dir >/dev/null 2>&1
     if [[ $? == 0 ]]; then
-        : ${(A)candidates::=${${(f)"$(git show-ref | awk '{ print $2}' |sed '/^refs\/stash$/d')"}#refs/}}
+	local branches_list="$(git show-ref | awk '{ print $2}' |sed '/^refs\/stash$/d')"
+        : ${(A)candidates::=${${(f)${branches_list}}#refs/}}
+	: ${(A)cand_descriptions::=${${(f)${branches_list}}#refs/(remotes|heads|tags)/}}
     fi
     actions=(zaw-src-git-branches-checkout zaw-src-git-branches-merge zaw-src-git-branches-merge-to zaw-src-git-branches-create zaw-src-git-branches-delete)
     act_descriptions=("check out" "merge" "merge to" "create new branch from..." "delete")
