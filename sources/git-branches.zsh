@@ -53,7 +53,7 @@ function zaw-src-git-branches-delete () {
         zle accept-line
     elif [[ "$b_type" == "remotes" ]] ; then
         local b_loc=${b_name%%/*}
-        local b_base=${b_name#$b_loc}
+        local b_base=${b_name#$b_loc/}
         BUFFER="git push $b_loc :$b_base"
         zle accept-line
     fi
