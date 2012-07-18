@@ -3,7 +3,7 @@
 function zaw-src-git-branches() {
     git rev-parse --git-dir >/dev/null 2>&1
     if [[ $? == 0 ]]; then
-        : ${(A)candidates::=${${(f)"$(git show-ref | awk '{print $2}')"}#refs/(heads|remotes)/}}
+        : ${(A)candidates::=${${(f)"$(git show-ref | awk '{print $2}')"}#refs/}}
     fi
     actions=(zaw-src-git-branches-checkout zaw-src-git-branches-create zaw-src-git-branches-delete)
     act_descriptions=("check out" "create new branch from..." "delete")
@@ -11,29 +11,33 @@ function zaw-src-git-branches() {
 }
 
 function zaw-src-git-branches-checkout () {
-    local base=$(basename $1)
-    if [[ "$base" == "$1" ]]; then
-        BUFFER="git checkout $1"
+    local b_type=${1%%/*}
+    local b_name=${1#(heads|remotes|tags)/}
+    if [[ "$b_type" == "heads" ]]; then
+        BUFFER="git checkout $b_name"
         zle accept-line
     else
-        BUFFER="git checkout -t $1"
+        BUFFER="git checkout -t $b_name"
         zle accept-line
     fi
 }
 
 function zaw-src-git-branches-create () {
+    local b_name=${1#(heads|remotes|tags)/}
     LBUFFER="git checkout -b "
-    RBUFFER=" $1"
+    RBUFFER=" $b_name"
 }
 
 function zaw-src-git-branches-delete () {
-    local base=$(basename $1)
-    local orig=$(dirname $1)
-    if [[ "$base" == "$1" ]]; then
+    local b_type=${1%%/*}
+    local b_name=${1#(heads|remotes|tags)/}
+    if [[ "$b_type" == "heads" ]] ; then
         BUFFER="git branch -d $1"
         zle accept-line
-    else
-        BUFFER="git push $orig :$base"
+    elif [[ "$b_type" == "remotes" ]] ; then
+        local b_loc=${b_name%%/*}
+        local b_base=${b_name#$b_loc}
+        BUFFER="git push $b_loc :$b_base"
         zle accept-line
     fi
 }
