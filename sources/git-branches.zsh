@@ -14,6 +14,7 @@ function zaw-src-git-branches() {
         zaw-src-git-branches-merge \
         zaw-src-git-branches-merge-rebase \
         zaw-src-git-branches-merge-no-ff \
+        zaw-src-git-branches-merge-to \
         zaw-src-git-branches-reset \
         zaw-src-git-branches-rebase \
         zaw-src-git-branches-rebase-interactive \
@@ -30,6 +31,7 @@ function zaw-src-git-branches() {
         "merge" \
         "merge rebase" \
         "merge no ff" \
+        "merge to" \
         "reset" \
         "rebase" \
         "rebase interactive from..." \
