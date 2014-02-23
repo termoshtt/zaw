@@ -19,6 +19,8 @@ function zaw-src-git-branches() {
         zaw-src-git-branches-rebase-interactive \
         zaw-src-git-branches-create \
         zaw-src-git-branches-reset-hard \
+        zaw-src-git-branches-diff \
+        zaw-src-git-branches-diff-stat \
         zaw-src-git-branches-delete \
         zaw-src-git-branches-delete-force)
     act_descriptions=(
@@ -33,6 +35,8 @@ function zaw-src-git-branches() {
         "rebase interactive from..." \
         "create new branch from..." \
         "reset hard" \
+        "diff" \
+        "diff statistics" \
         "delete" \
         "delete force")
     options=()
@@ -121,6 +125,18 @@ function zaw-src-git-branches-rebase-interactive () {
     local b_type=${1%%/*}
     local b_name=${1#(heads|remotes|tags)/}
     BUFFER="git rebase -i $b_name"
+    zle accept-line
+}
+
+function zaw-src-git-branches-diff() {
+    local b_name=${1#(heads|remotes|tags)/}
+    BUFFER="git diff $b_name"
+    zle accept-line
+}
+
+function zaw-src-git-branches-diff-stat() {
+  local b_name=${1#(heads|remotes|tags)/}
+    BUFFER="git diff --stat $b_name"
     zle accept-line
 }
 
