@@ -15,8 +15,8 @@ function zaw-src-git-status() {
 
     fi
 
-    actions=(zaw-src-git-status-add zaw-src-git-status-add-p zaw-src-git-status-reset zaw-src-git-status-checkout zaw-callback-edit-file zaw-src-git-status-rm)
-    act_descriptions=("add" "add -p" "reset" "checkout" "edit" "rm")
+    actions=(zaw-src-git-status-add zaw-src-git-status-add-p zaw-src-git-status-reset zaw-src-git-status-checkout zaw-src-git-status-diff zaw-callback-edit-file zaw-src-git-status-rm)
+    act_descriptions=("add" "add -p" "reset" "checkout" "diff" "edit" "rm")
     options=()
 }
 
@@ -45,6 +45,13 @@ function zaw-src-git-status-checkout() {
   local f_path=${1#(\?\? | M |AM |M  |A  | D |UU |AA )}
   local git_base="$(git rev-parse --show-cdup)"
   BUFFER="git checkout $git_base$f_path"
+  zle accept-line
+}
+
+function zaw-src-git-status-diff() {
+  local f_path=${1#(\?\? | M |AM |M  |A  | D |UU |AA )}
+  local git_base="$(git rev-parse --show-cdup)"
+  BUFFER="git diff $git_base$f_path"
   zle accept-line
 }
 
