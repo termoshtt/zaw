@@ -7,13 +7,17 @@ function zaw-src-git-log() {
         : ${(A)cand_descriptions::=${(f)desc}}
         : ${(A)candidates::=${(f)desc}}
     fi
-    actions=(zaw-src-git-log-insert \
+    actions=(zaw-src-git-log-diff \
+             zaw-src-git-log-diff-stat \
+             zaw-src-git-log-insert \
              zaw-src-git-log-reset \
              zaw-src-git-log-reset-hard \
              zaw-src-git-log-cherry-pick \
              zaw-src-git-log-create-branch \
              zaw-src-git-log-revert)
-    act_descriptions=("insert" \
+    act_descriptions=("diff of each commit" \
+                      "diff --stat of each commit" \
+                      "insert" \
                       "reset" \
                       "reset --hard" \
                       "cherry-pick" \
@@ -24,6 +28,18 @@ function zaw-src-git-log() {
 
 function _zaw-src-git-log-strip(){
     echo $1 | sed -e 's/^[*|/\\ ]* \([a-f0-9]*\) .*/\1/'
+}
+
+function zaw-src-git-log-diff(){
+    local hash_val=$(_zaw-src-git-log-strip $1)
+    BUFFER="git diff $hash_val^ $hash_val"
+    zle accept-line
+}
+
+function zaw-src-git-log-diff-stat(){
+    local hash_val=$(_zaw-src-git-log-strip $1)
+    BUFFER="git diff --stat $hash_val^ $hash_val"
+    zle accept-line
 }
 
 function zaw-src-git-log-insert(){
